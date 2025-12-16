@@ -1,0 +1,38 @@
+^C:\USERS\STASIA\DOCUMENTS\GITHUB\PROG_KURS\PROG_KURS\BUILD\CMAKEFILES\B5A5EC2C3214C521F3927973AD161B73\NODEIDS.H.RULE
+setlocal
+C:\Users\Stasia\AppData\Local\Microsoft\WindowsApps\python3.exe C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/thirdparty/open62541/tools/generate_nodeid_header.py C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/thirdparty/open62541/tools/schema/NodeIds.csv C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/build/open62541/src_generated/open62541/nodeids NS0
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\STASIA\DOCUMENTS\GITHUB\PROG_KURS\PROG_KURS\BUILD\CMAKEFILES\B5A5EC2C3214C521F3927973AD161B73\STATUSCODES.H.RULE
+setlocal
+C:\Users\Stasia\AppData\Local\Microsoft\WindowsApps\python3.exe C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/thirdparty/open62541/tools/generate_statuscode_descriptions.py C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/thirdparty/open62541/tools/schema/StatusCode.csv C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/build/open62541/src_generated/open62541/statuscodes
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\STASIA\DOCUMENTS\GITHUB\PROG_KURS\PROG_KURS\BUILD\CMAKEFILES\65581FA6E11973BB3F87C35CAA2B6240\OPEN62541-GENERATOR-STATUSCODE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\STASIA\DOCUMENTS\GITHUB\PROG_KURS\PROG_KURS\THIRDPARTY\OPEN62541\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs -BC:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/build --check-stamp-file C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/build/open62541/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

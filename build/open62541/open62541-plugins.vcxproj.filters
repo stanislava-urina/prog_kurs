@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\plugins\ua_log_stdout.c">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\plugins\ua_accesscontrol_default.c">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\plugins\ua_nodestore_ziptree.c">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\plugins\ua_nodestore_hashmap.c">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\plugins\ua_config_default.c">
+      <Filter>plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\plugins\crypto\ua_pki_none.c">
+      <Filter>plugins\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\plugins\crypto\ua_securitypolicy_none.c">
+      <Filter>plugins\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\arch\win32\ua_clock.c">
+      <Filter>arch\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\arch\win32\ua_architecture_functions.c">
+      <Filter>arch\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\arch\network_tcp.c">
+      <Filter>arch</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\open62541\src_generated\open62541\config.h">
+      <Filter>..\..\build\open62541\src_generated\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\deps\ms_stdint.h">
+      <Filter>deps</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\architecture_definitions.h">
+      <Filter>include\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\arch\win32\ua_architecture.h">
+      <Filter>arch\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\open62541\src_generated\open62541\statuscodes.h">
+      <Filter>..\..\build\open62541\src_generated\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\open62541\src_generated\open62541\nodeids.h">
+      <Filter>..\..\build\open62541\src_generated\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\common.h">
+      <Filter>include\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\types.h">
+      <Filter>include\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\open62541\src_generated\open62541\types_generated.h">
+      <Filter>..\..\build\open62541\src_generated\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\open62541\src_generated\open62541\types_generated_handling.h">
+      <Filter>..\..\build\open62541\src_generated\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\util.h">
+      <Filter>include\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\plugin\log.h">
+      <Filter>include\open62541\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\plugin\network.h">
+      <Filter>include\open62541\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\plugin\accesscontrol.h">
+      <Filter>include\open62541\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\plugin\pki.h">
+      <Filter>include\open62541\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\plugin\securitypolicy.h">
+      <Filter>include\open62541\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\plugin\pubsub.h">
+      <Filter>include\open62541\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\deps\ziptree.h">
+      <Filter>deps</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\deps\aa_tree.h">
+      <Filter>deps</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\plugin\nodestore.h">
+      <Filter>include\open62541\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\server_pubsub.h">
+      <Filter>include\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\server.h">
+      <Filter>include\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\client.h">
+      <Filter>include\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\client_highlevel.h">
+      <Filter>include\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\client_subscriptions.h">
+      <Filter>include\open62541</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\include\open62541\client_highlevel_async.h">
+      <Filter>include\open62541</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\CMakeFiles\b5a5ec2c3214c521f3927973ad161b73\statuscodes.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\CMakeFiles\b5a5ec2c3214c521f3927973ad161b73\nodeids.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="..">
+      <UniqueIdentifier>{E5AB8416-7457-3C96-AD18-6F5A9B82DAD2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{3B304B2F-99DA-309B-AE96-DD71D6F798F9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build">
+      <UniqueIdentifier>{E5FCB15A-F757-33FC-B5AA-FB059110DB7B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\open62541">
+      <UniqueIdentifier>{DF0A278B-A82F-3C1A-9F49-35B0A4C764D8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\open62541\src_generated">
+      <UniqueIdentifier>{556B554F-4335-3A41-A2BF-23BEC684F2B1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\open62541\src_generated\open62541">
+      <UniqueIdentifier>{0D22B60E-6DD4-31CE-8248-10FD4651E473}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{7D1D7078-6650-3DDE-8766-858741240D9E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="arch">
+      <UniqueIdentifier>{39518C96-137F-3576-9057-FB776212005F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="arch\win32">
+      <UniqueIdentifier>{81A41930-6045-3331-ABE3-B3B055355B3B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deps">
+      <UniqueIdentifier>{66C43DD7-1CD9-3E35-9E73-D52CE5E94A28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{CAE2A21C-CAD8-374C-AC2B-90B2FDFEE054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\open62541">
+      <UniqueIdentifier>{F79E9549-794D-33DA-BA6F-2C760676A09C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\open62541\plugin">
+      <UniqueIdentifier>{06F89730-F4D1-3904-9C13-0A9096154801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="plugins">
+      <UniqueIdentifier>{564E63F3-9C1A-33EE-B3CC-5E4F9798EA12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="plugins\crypto">
+      <UniqueIdentifier>{863C8B27-E50F-32E5-8582-9161EAF3140D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\CMakeFiles\b5a5ec2c3214c521f3927973ad161b73\namespace0_generated.c.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\CMakeFiles\b5a5ec2c3214c521f3927973ad161b73\statuscodes.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\CMakeFiles\b5a5ec2c3214c521f3927973ad161b73\transport_generated.c.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\CMakeFiles\b5a5ec2c3214c521f3927973ad161b73\types_generated.c.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\CMakeFiles\65581fa6e11973bb3f87c35caa2b6240\cpplint.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\thirdparty\open62541\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\open62541\CMakeFiles\cpplint" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{7D1D7078-6650-3DDE-8766-858741240D9E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
