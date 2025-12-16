@@ -1,0 +1,477 @@
+#define UNICODE
+#define _UNICODE
+#include <windows.h>
+#include <commctrl.h>
+#include <string>
+#include <vector>
+#include <thread>
+#include <chrono>
+#include <random>
+#include <ctime>
+
+#pragma comment(lib, "comctl32.lib")
+
+// Простой класс OPC UA клиента
+class OPCUAClient {
+private:
+    struct TagData {
+        std::wstring name;
+        double value;
+        std::wstring unit;
+        std::wstring timestamp;
+        std::wstring quality;
+        
+        TagData(const std::wstring& n, const std::wstring& u)
+            : name(n), value(0.0), unit(u), quality(L"НОРМА") {}
+        
+        void update(double newValue) {
+            value = newValue;
+            auto now = std::chrono::system_clock::now();
+            auto time = std::chrono::system_clock::to_time_t(now);
+            std::tm tm;
+            localtime_s(&tm, &time);
+            wchar_t timeStr[100];
+            wcsftime(timeStr, 100, L"%H:%M:%S", &tm);
+            timestamp = timeStr;
+        }
+    };
+    
+    std::vector<TagData> tags;
+    std::random_device rd;
+    std::mt19937 gen;
+    
+public:
+    OPCUAClient() : gen(rd()) {
+        // Теги с русским текстом в широких строках
+        addTag(L"Напряжение", L"В", 190.0, 240.0);
+        addTag(L"Ток", L"А", 1.0, 10.0);
+        addTag(L"Мощность", L"Вт", 500.0, 2400.0);
+        addTag(L"Частота", L"Гц", 49.8, 50.2);
+        addTag(L"Температура", L"°C", 20.0, 35.0);
+    }
+    
+    void addTag(const std::wstring& name, const std::wstring& unit, double minVal, double maxVal) {
+        tags.emplace_back(name, unit);
+    }
+    
+    void updateValues() {
+        for (auto& tag : tags) {
+            double minVal, maxVal;
+            
+            if (tag.name == L"Напряжение") {
+                minVal = 190.0; maxVal = 240.0;
+            } else if (tag.name == L"Ток") {
+                minVal = 1.0; maxVal = 10.0;
+            } else if (tag.name == L"Мощность") {
+                minVal = 500.0; maxVal = 2400.0;
+            } else if (tag.name == L"Частота") {
+                minVal = 49.8; maxVal = 50.2;
+            } else if (tag.name == L"Температура") {
+                minVal = 20.0; maxVal = 35.0;
+            } else {
+                minVal = 0.0; maxVal = 100.0;
+            }
+            
+            std::uniform_real_distribution<double> dist(minVal, maxVal);
+            tag.update(dist(gen));
+        }
+    }
+    
+    std::vector<TagData> getTags() const {
+        return tags;
+    }
+    
+    size_t getTagCount() const {
+        return tags.size();
+    }
+};
+
+// Глобальные переменные
+OPCUAClient g_client;
+bool g_monitoring = false;
+HWND g_hMainWnd;
+HWND g_hTagList;
+HWND g_hLogEdit;
+HWND g_hStatusBar;
+
+// Функция для создания русского шрифта
+HFONT CreateRussianFont(int size) {
+    // Пробуем разные шрифты, которые точно есть в Windows
+    const wchar_t* fontNames[] = {
+        L"Segoe UI",      // Windows 10/11
+        L"Microsoft Sans Serif",  // Windows XP/7/8
+        L"Arial",         // Все Windows
+        L"Tahoma",        // Все Windows
+        L"Times New Roman" // Все Windows
+    };
+    
+    // Пробуем создать каждый шрифт
+    for (const wchar_t* fontName : fontNames) {
+        HFONT hFont = CreateFontW(
+            size, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+            RUSSIAN_CHARSET,  // Важно: русская кодировка!
+            OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+            DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+            fontName
+        );
+        
+        if (hFont != NULL) {
+            return hFont;
+        }
+    }
+    
+    // Если ничего не сработало, используем системный
+    return CreateFontW(size, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+                      DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                      DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, NULL);
+}
+
+// Добавление сообщения в лог
+void AddLogMessage(const std::wstring& message) {
+    SYSTEMTIME st;
+    GetLocalTime(&st);
+    wchar_t timeStr[50];
+    swprintf(timeStr, 50, L"[%02d:%02d:%02d] ", st.wHour, st.wMinute, st.wSecond);
+    
+    std::wstring fullMessage = timeStr + message + L"\r\n";
+    
+    int len = GetWindowTextLengthW(g_hLogEdit);
+    SendMessageW(g_hLogEdit, EM_SETSEL, len, len);
+    SendMessageW(g_hLogEdit, EM_REPLACESEL, FALSE, (LPARAM)fullMessage.c_str());
+    
+    // Прокручиваем вниз
+    SendMessageW(g_hLogEdit, WM_VSCROLL, SB_BOTTOM, 0);
+}
+
+// Обновление списка тегов
+void UpdateTagList() {
+    ListView_DeleteAllItems(g_hTagList);
+    
+    auto tags = g_client.getTags();
+    
+    for (size_t i = 0; i < tags.size(); i++) {
+        const auto& tag = tags[i];
+        
+        LVITEMW lvi = {0};
+        lvi.mask = LVIF_TEXT;
+        lvi.iItem = (int)i;
+        lvi.iSubItem = 0;
+        lvi.pszText = (LPWSTR)tag.name.c_str();
+        ListView_InsertItemW(g_hTagList, &lvi);
+        
+        wchar_t value[50];
+        swprintf(value, 50, L"%.2f", tag.value);
+        ListView_SetItemTextW(g_hTagList, i, 1, value);
+        
+        ListView_SetItemTextW(g_hTagList, i, 2, (LPWSTR)tag.unit.c_str());
+        ListView_SetItemTextW(g_hTagList, i, 3, (LPWSTR)tag.timestamp.c_str());
+        ListView_SetItemTextW(g_hTagList, i, 4, (LPWSTR)tag.quality.c_str());
+    }
+    
+    wchar_t statusText[50];
+    swprintf(statusText, 50, L"Тегов: %d", (int)tags.size());
+    SendMessageW(g_hStatusBar, SB_SETTEXTW, 1, (LPARAM)statusText);
+}
+
+// Поток мониторинга
+void MonitorThread() {
+    while (g_monitoring) {
+        g_client.updateValues();
+        PostMessageW(g_hMainWnd, WM_USER + 1, 0, 0);
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+}
+
+// Обработчик сообщений окна
+LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    switch (msg) {
+        case WM_CREATE: {
+            // Инициализация Common Controls
+            INITCOMMONCONTROLSEX icex = { sizeof(INITCOMMONCONTROLSEX), ICC_LISTVIEW_CLASSES };
+            InitCommonControlsEx(&icex);
+            
+            // Создаем таблицу
+            g_hTagList = CreateWindowExW(0, WC_LISTVIEWW, L"",
+                WS_VISIBLE | WS_CHILD | WS_BORDER | LVS_REPORT | LVS_SINGLESEL,
+                10, 50, 860, 300, hWnd, NULL, NULL, NULL);
+            
+            // Устанавливаем русский шрифт
+            HFONT hFont = CreateRussianFont(14);
+            SendMessageW(g_hTagList, WM_SETFONT, (WPARAM)hFont, TRUE);
+            
+            // Добавляем колонки с русскими названиями
+            LVCOLUMNW lvc = {0};
+            lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
+            lvc.fmt = LVCFMT_LEFT;
+            
+            lvc.pszText = L"ТЕГ";
+            lvc.cx = 150;
+            ListView_InsertColumnW(g_hTagList, 0, &lvc);
+            
+            lvc.pszText = L"ЗНАЧЕНИЕ";
+            lvc.cx = 100;
+            ListView_InsertColumnW(g_hTagList, 1, &lvc);
+            
+            lvc.pszText = L"ЕД.";
+            lvc.cx = 50;
+            ListView_InsertColumnW(g_hTagList, 2, &lvc);
+            
+            lvc.pszText = L"ВРЕМЯ";
+            lvc.cx = 100;
+            ListView_InsertColumnW(g_hTagList, 3, &lvc);
+            
+            lvc.pszText = L"СТАТУС";
+            lvc.cx = 80;
+            ListView_InsertColumnW(g_hTagList, 4, &lvc);
+            
+            // Создаем кнопки с русским текстом
+            HFONT hButtonFont = CreateRussianFont(12);
+            
+            struct ButtonInfo {
+                const wchar_t* text;
+                int id;
+                int x;
+            } buttons[] = {
+                {L"ПОДКЛЮЧИТЬ", 1, 10},
+                {L"ОТКЛЮЧИТЬ", 2, 120},
+                {L"СТАРТ", 3, 230},
+                {L"СТОП", 4, 330},
+                {L"ОБНОВИТЬ", 5, 430},
+                {L"СОХРАНИТЬ", 6, 540},
+                {L"ИЗМЕНИТЬ", 8, 640},
+            };
+            
+            for (const auto& btn : buttons) {
+                HWND hButton = CreateWindowW(L"BUTTON", btn.text,
+                    WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
+                    btn.x, 10, 100, 30, hWnd, (HMENU)btn.id, NULL, NULL);
+                SendMessageW(hButton, WM_SETFONT, (WPARAM)hButtonFont, TRUE);
+            }
+            
+            // Создаем поле лога
+            g_hLogEdit = CreateWindowExW(WS_EX_CLIENTEDGE, L"EDIT", L"",
+                WS_VISIBLE | WS_CHILD | WS_BORDER | ES_MULTILINE | 
+                ES_READONLY | WS_VSCROLL | ES_AUTOVSCROLL | ES_LEFT,
+                10, 360, 860, 200, hWnd, NULL, NULL, NULL);
+            
+            HFONT hLogFont = CreateRussianFont(11);
+            SendMessageW(g_hLogEdit, WM_SETFONT, (WPARAM)hLogFont, TRUE);
+            
+            // Создаем статус бар
+            g_hStatusBar = CreateWindowW(STATUSCLASSNAMEW, L"",
+                WS_VISIBLE | WS_CHILD | SBARS_SIZEGRIP,
+                0, 0, 0, 0, hWnd, NULL, NULL, NULL);
+            
+            int parts[] = {200, 400, 600, -1};
+            SendMessageW(g_hStatusBar, SB_SETPARTS, 4, (LPARAM)parts);
+            SendMessageW(g_hStatusBar, SB_SETTEXTW, 0, (LPARAM)L"ГОТОВО");
+            SendMessageW(g_hStatusBar, SB_SETTEXTW, 1, (LPARAM)L"Тегов: 0");
+            SendMessageW(g_hStatusBar, SB_SETTEXTW, 2, (LPARAM)L"");
+            SendMessageW(g_hStatusBar, SB_SETTEXTW, 3, (LPARAM)L"OPC UA Monitor");
+            
+            // Инициализируем данные
+            UpdateTagList();
+            AddLogMessage(L"Программа запущена");
+            AddLogMessage(L"Режим симуляции данных OPC UA");
+            
+            break;
+        }
+        case WM_USER + 2: // Обновление после записи
+            UpdateTagList();
+            AddLogMessage(L"Значение тега изменено через диалог записи");
+            break;
+            
+        case WM_COMMAND: {
+            int id = LOWORD(wParam);
+            
+            switch (id) {
+                case 1: // Подключить
+                    AddLogMessage(L"Подключение к opc.tcp://localhost:4840");
+                    SendMessageW(g_hStatusBar, SB_SETTEXTW, 0, (LPARAM)L"ПОДКЛЮЧЕНО");
+                    AddLogMessage(L"Используется режим симуляции");
+                    break;
+                    
+                case 2: // Отключить
+                    AddLogMessage(L"Отключение от сервера");
+                    SendMessageW(g_hStatusBar, SB_SETTEXTW, 0, (LPARAM)L"ОТКЛЮЧЕНО");
+                    break;
+                    
+                case 3: // Старт
+                    if (!g_monitoring) {
+                        g_monitoring = true;
+                        std::thread(MonitorThread).detach();
+                        AddLogMessage(L"Запуск мониторинга");
+                        SendMessageW(g_hStatusBar, SB_SETTEXTW, 2, (LPARAM)L"МОНИТОРИНГ");
+                    }
+                    break;
+                    
+                case 4: // Стоп
+                    g_monitoring = false;
+                    AddLogMessage(L"Остановка мониторинга");
+                    SendMessageW(g_hStatusBar, SB_SETTEXTW, 2, (LPARAM)L"");
+                    break;
+                    
+                case 5: // Обновить
+                    g_client.updateValues();
+                    UpdateTagList();
+                    AddLogMessage(L"Ручное обновление данных");
+                    break;
+                    
+                case 6: // Сохранить
+                    {
+                        wchar_t filename[MAX_PATH] = L"данные_opcua.txt";
+                        
+                        OPENFILENAMEW ofn = {0};
+                        ofn.lStructSize = sizeof(ofn);
+                        ofn.hwndOwner = hWnd;
+                        ofn.lpstrFile = filename;
+                        ofn.nMaxFile = MAX_PATH;
+                        ofn.lpstrFilter = L"Текстовые файлы (*.txt)\0*.txt\0Все файлы (*.*)\0*.*\0";
+                        ofn.nFilterIndex = 1;
+                        ofn.lpstrDefExt = L"txt";
+                        ofn.Flags = OFN_OVERWRITEPROMPT;
+                        
+                        if (GetSaveFileNameW(&ofn)) {
+                            FILE* file;
+                            _wfopen_s(&file, filename, L"w, ccs=UTF-8");
+                            
+                            if (file) {
+                                fwprintf(file, L"\xFEFF"); // BOM для UTF-8
+                                fwprintf(file, L"ТЕГ;ЗНАЧЕНИЕ;ЕДИНИЦА;ВРЕМЯ;СТАТУС\n");
+                                
+                                auto tags = g_client.getTags();
+                                for (const auto& tag : tags) {
+                                    fwprintf(file, L"%s;%.2f;%s;%s;%s\n",
+                                            tag.name.c_str(),
+                                            tag.value,
+                                            tag.unit.c_str(),
+                                            tag.timestamp.c_str(),
+                                            tag.quality.c_str());
+                                }
+                                
+                                fclose(file);
+                                AddLogMessage(L"Данные сохранены в файл");
+                                SendMessageW(g_hStatusBar, SB_SETTEXTW, 0, (LPARAM)L"СОХРАНЕНО");
+                            }
+                        }
+                    }
+                    break;
+                case 7: // Кнопка ИЗМЕНИТЬ
+                    {
+                        // Создаем простое диалоговое окно
+                        HWND hDlg = CreateDialogParamW(
+                            GetModuleHandle(NULL),
+                            MAKEINTRESOURCE(1000), // ID диалога (нужно добавить в ресурсы)
+                            hWnd,
+                            WriteDialogProc,
+                            0
+                        );
+                        
+                        if (hDlg) {
+                            ShowWindow(hDlg, SW_SHOW);
+                        } else {
+                            // Если нет ресурсов, создаем простое окно
+                            MessageBoxW(hWnd, 
+                                L"Функция записи активирована\n(диалог в разработке)", 
+                                L"Изменение значения", 
+                                MB_OK | MB_ICONINFORMATION);
+                            
+                            // Простая запись для теста
+                            if (g_client.writeTagByName("Напряжение", 220.0)) {
+                                AddLogMessage(L"Тестовое значение записано: Напряжение = 220.0 В");
+                                UpdateTagList();
+                            }
+                        }
+                                        }
+                    break;
+                case 8: // Кнопка ИЗМЕНИТЬ
+                    {
+                        // Проверяем, есть ли теги
+                        if (g_client.tagCount() == 0) {
+                            MessageBoxW(hWnd, 
+                                L"Нет тегов для изменения. Сначала добавьте теги.",
+                                L"Ошибка",
+                                MB_OK | MB_ICONERROR);
+                            break;
+                        }
+                        
+                        // Открываем диалог записи
+                        DialogBoxW(GetModuleHandle(NULL),
+                                MAKEINTRESOURCE(2),  // ID диалога записи
+                                hWnd,
+                                WriteDialogProc);
+                        
+                        break;
+                    }
+            }
+            break;
+        }
+        
+        case WM_USER + 1: // Обновить UI из потока
+            UpdateTagList();
+            break;
+            
+        case WM_SIZE: {
+            int width = LOWORD(lParam);
+            int height = HIWORD(lParam);
+            
+            MoveWindow(g_hTagList, 10, 50, width - 20, 300, TRUE);
+            MoveWindow(g_hLogEdit, 10, 360, width - 20, height - 420, TRUE);
+            SendMessageW(g_hStatusBar, WM_SIZE, 0, 0);
+            break;
+        }
+        
+        case WM_DESTROY:
+            g_monitoring = false;
+            PostQuitMessage(0);
+            break;
+            
+        default:
+            return DefWindowProcW(hWnd, msg, wParam, lParam);
+    }
+    return 0;
+}
+
+// Точка входа
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, 
+                    PWSTR pCmdLine, int nCmdShow) {
+    // Регистрируем класс окна
+    WNDCLASSW wc = {0};
+    wc.lpfnWndProc = WndProc;
+    wc.hInstance = hInstance;
+    wc.hCursor = LoadCursorW(NULL, IDC_ARROW);
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
+    wc.lpszClassName = L"OPCUAMonitorClass";
+    wc.hIcon = LoadIconW(NULL, IDI_APPLICATION);
+    
+    if (!RegisterClassW(&wc)) {
+        MessageBoxW(NULL, L"Ошибка регистрации класса окна", L"Ошибка", MB_ICONERROR);
+        return 0;
+    }
+    
+    // Создаем окно
+    g_hMainWnd = CreateWindowW(
+        L"OPCUAMonitorClass",
+        L"OPC UA Monitor - Курсовая работа",
+        WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+        CW_USEDEFAULT, CW_USEDEFAULT, 900, 700,
+        NULL, NULL, hInstance, NULL
+    );
+    
+    if (!g_hMainWnd) {
+        MessageBoxW(NULL, L"Ошибка создания окна", L"Ошибка", MB_ICONERROR);
+        return 0;
+    }
+    
+    ShowWindow(g_hMainWnd, nCmdShow);
+    UpdateWindow(g_hMainWnd);
+    
+    // Цикл сообщений
+    MSG msg;
+    while (GetMessageW(&msg, NULL, 0, 0)) {
+        TranslateMessage(&msg);
+        DispatchMessageW(&msg);
+    }
+    
+    return (int)msg.wParam;
+}

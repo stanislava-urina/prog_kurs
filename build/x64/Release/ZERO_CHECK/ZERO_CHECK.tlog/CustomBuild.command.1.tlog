@@ -1,6 +1,6 @@
 ^C:\USERS\STASIA\DOCUMENTS\GITHUB\PROG_KURS\PROG_KURS\BUILD\CMAKEFILES\F5AAB777ED8A06A931C14272C99E7402\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs -BC:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/build/dynamic_opcua_server.sln
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs -BC:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/build/OPCUAWin32GUI.sln
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

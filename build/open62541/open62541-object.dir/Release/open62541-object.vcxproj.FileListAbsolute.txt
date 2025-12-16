@@ -1,1 +1,0 @@
-C:\Users\Stasia\Documents\GitHub\prog_kurs\prog_kurs\build\open62541\open62541-object.dir\Release\open62541-object.lib

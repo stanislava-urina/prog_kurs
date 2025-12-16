@@ -1,9 +1,0 @@
-# CMake generation dependency list for this directory.
-C:/Program Files/CMake/share/cmake-3.28/Modules/FindLATEX.cmake
-C:/Program Files/CMake/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake
-C:/Program Files/CMake/share/cmake-3.28/Modules/FindPackageMessage.cmake
-C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/thirdparty/open62541/doc/CMakeLists.txt
-C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/thirdparty/open62541/doc/conf.py
-C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/thirdparty/open62541/tools/cmake/FindPackageHandleStandardArgs.cmake
-C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/thirdparty/open62541/tools/cmake/FindPackageMessage.cmake
-C:/Users/Stasia/Documents/GitHub/prog_kurs/prog_kurs/thirdparty/open62541/tools/cmake/FindSphinx.cmake
